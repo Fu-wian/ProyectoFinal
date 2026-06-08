@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -11,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Avance2_ProyectoFinal">
-
         <activity
             android:name=".Activities.MainActivity"
             android:exported="true">
@@ -20,9 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Activities.RegistrarResiduosActivity" />
-        <activity android:name=".Activities.HistorialResiduosActivity" />
+        <activity android:name=".Activities.RegistrarResiduoActivity"/>
+        <activity android:name=".Activities.PerfilActivity"/>
+        <activity android:name=".Activities.HistorialResiduosActivity"/>
+        <activity android:name=".Activities.EcoSpotActivity"/>
 
     </application>
 
