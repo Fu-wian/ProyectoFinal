@@ -22,9 +22,8 @@ class HistorialResiduosActivity : AppCompatActivity(){
         setContentView(R.layout.historial_residuos)
 
         listView  = findViewById(R.id.listView)
-        btnVolver = findViewById<Button>(
-            resources.getIdentifier("button", "id", packageName)
-        ).also { it.setOnClickListener { finish() } }
+        btnVolver = findViewById(R.id.btnVolver)
+        btnVolver.setOnClickListener { finish() }
 
         configurarListView()
         observarViewModel()
