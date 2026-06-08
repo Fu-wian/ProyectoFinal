@@ -3,6 +3,7 @@ package com.utp.avance2_proyectofinal.Activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -10,8 +11,10 @@ import com.utp.avance2_proyectofinal.R
 import com.utp.avance2_proyectofinal.viewmodel.RegistrarResiduosVM
 import kotlinx.coroutines.launch
 
-class RegistrarResiduosActivity: AppCompatActivity(){
+class RegistrarResiduosActivity : AppCompatActivity() {
+
     companion object {
+        const val EXTRA_USUARIO = "usuario"
         const val RESULT_RESIDUO_AGREGADO = "residuo_agregado"
     }
 
@@ -26,32 +29,50 @@ class RegistrarResiduosActivity: AppCompatActivity(){
     private lateinit var btHistorial: Button
 
     private val categorias = listOf("Plástico", "Vidrio", "Papel", "Metal", "Electrónico", "Orgánico")
-    private val unidades    = listOf("kg", "g", "lb", "unidades")
+    private val unidades = listOf("kg", "g", "lb", "unidades")
+
+    private val historialLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            etCantidad.text.clear()
+            etOrigen.text.clear()
+            cbConfirmar.isChecked = false
+            Toast.makeText(this, "Volviste del historial", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registrar_residuos)
 
-        spCategoria  = findViewById(R.id.spCategoria)
-        spUnidad     = findViewById(R.id.spUnidad)
-        etCantidad   = findViewById(R.id.etCantidad)
-        etOrigen     = findViewById(R.id.etOrigen)
-        cbConfirmar  = findViewById(R.id.cbConfirmar)
-        btAgregar    = findViewById(R.id.btAgregar)
-        btHistorial  = findViewById(R.id.btHistorial)
+        // Recibe el dato enviado desde MainActivity con putExtra
+        val nombreUsuario = intent.getStringExtra(EXTRA_USUARIO) ?: "Usuario"
+        Toast.makeText(this, "Bienvenido, $nombreUsuario", Toast.LENGTH_SHORT).show()
+
+        spCategoria = findViewById(R.id.spCategoria)
+        spUnidad    = findViewById(R.id.spUnidad)
+        etCantidad  = findViewById(R.id.etCantidad)
+        etOrigen    = findViewById(R.id.etOrigen)
+        cbConfirmar = findViewById(R.id.cbConfirmar)
+        btAgregar   = findViewById(R.id.btAgregar)
+        btHistorial = findViewById(R.id.btHistorial)
 
         spCategoria.adapter = ArrayAdapter(this,
             android.R.layout.simple_spinner_item, categorias).also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
 
         spUnidad.adapter = ArrayAdapter(this,
             android.R.layout.simple_spinner_item, unidades).also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
 
         btAgregar.setOnClickListener { validarYGuardar() }
 
         btHistorial.setOnClickListener {
-            startActivity(Intent(this, HistorialResiduosActivity::class.java))
+            val intent = Intent(this, HistorialResiduosActivity::class.java)
+            historialLauncher.launch(intent)
         }
 
         observarViewModel()
