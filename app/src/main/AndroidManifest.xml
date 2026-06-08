@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Avance2_ProyectoFinal">
         <activity
             android:name=".Activities.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.PerfilActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
