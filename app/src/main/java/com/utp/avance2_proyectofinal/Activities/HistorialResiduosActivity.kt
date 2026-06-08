@@ -59,9 +59,6 @@ class HistorialResiduosActivity : AppCompatActivity(){
         val categorias = arrayOf("Plástico", "Vidrio", "Papel", "Metal", "Electrónico", "Orgánico")
         val unidades   = arrayOf("kg", "g", "lb", "unidades")
 
-        // Inflamos un layout simple con un EditText para la cantidad y origen
-        val view = layoutInflater.inflate(android.R.layout.simple_list_item_2, null)
-
         val etCantidad = EditText(this).apply {
             setText(item.cantidad.toString())
             inputType = android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
@@ -72,11 +69,30 @@ class HistorialResiduosActivity : AppCompatActivity(){
             hint = "Origen"
         }
 
+        val spCategoria = Spinner(this).apply {
+            adapter = ArrayAdapter(this@HistorialResiduosActivity,
+                android.R.layout.simple_spinner_item, categorias).also {
+                it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+            // Selecciona la categoría actual del item
+            setSelection(categorias.indexOf(item.categoria).takeIf { it >= 0 } ?: 0)
+        }
+
+        val spUnidad = Spinner(this).apply {
+            adapter = ArrayAdapter(this@HistorialResiduosActivity,
+                android.R.layout.simple_spinner_item, unidades).also {
+                it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+            // Selecciona la unidad actual del item
+            setSelection(unidades.indexOf(item.unidad).takeIf { it >= 0 } ?: 0)
+        }
+
         val layout = android.widget.LinearLayout(this).apply {
             orientation = android.widget.LinearLayout.VERTICAL
             setPadding(48, 16, 48, 16)
-            addView(EditText(context).apply { isEnabled = false; setText(item.categoria) })
+            addView(spCategoria)
             addView(etCantidad)
+            addView(spUnidad)
             addView(etOrigen)
         }
 
@@ -93,8 +109,10 @@ class HistorialResiduosActivity : AppCompatActivity(){
                 }
 
                 val residuoEditado = item.copy(
-                    cantidad = nuevaCantidad,
-                    origen   = nuevoOrigen
+                    categoria = spCategoria.selectedItem.toString(),
+                    cantidad  = nuevaCantidad,
+                    unidad    = spUnidad.selectedItem.toString(),
+                    origen    = nuevoOrigen
                 )
                 viewModel.editarResiduo(residuoEditado)
                 Toast.makeText(this, "Residuo actualizado", Toast.LENGTH_SHORT).show()

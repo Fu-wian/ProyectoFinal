@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class RegistrarResiduosActivity: AppCompatActivity(){
     companion object {
-        const val RESULT_RESIDUO_AGREGADO = "residuo_agregado"
+        const val RESULT_RESIDUO_AGREGADO = "extra_registrar"
     }
 
     private val viewModel: RegistrarResiduosVM by viewModels()

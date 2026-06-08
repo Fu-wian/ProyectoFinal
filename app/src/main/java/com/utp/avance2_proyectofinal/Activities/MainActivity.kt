@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.utp.avance2_proyectofinal.R
 import androidx.cardview.widget.CardView
 import android.content.Intent
+import com.utp.avance2_proyectofinal.data.RegistrarResiduos
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         cardRegistrar.setOnClickListener {
-            val intent = Intent(this, RegistrarResiduoActivity::class.java)
+            val intent = Intent(this, RegistrarResiduosActivity::class.java)
             intent.putExtra(PerfilActivity.EXTRA_NOMBRE_USUARIO,"Extra_Registrar")
             startActivity(intent)
         }
