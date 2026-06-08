@@ -17,6 +17,10 @@ import kotlinx.coroutines.launch
 
 class PerfilActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_NOMBRE_USUARIO = "Extra_perfil"
+    }
+
     private lateinit var etNombre: EditText
     private lateinit var etCorreo: EditText
     private lateinit var rgTema: RadioGroup
