@@ -23,9 +23,6 @@ class PerfilActivity : AppCompatActivity() {
 
     private lateinit var etNombre: EditText
     private lateinit var etCorreo: EditText
-    private lateinit var rgTema: RadioGroup
-    private lateinit var rbClaro: RadioButton
-    private lateinit var rbOscuro: RadioButton
     private lateinit var swNotificaciones: Switch
     private lateinit var btnGuardar: Button
 
@@ -44,19 +41,17 @@ class PerfilActivity : AppCompatActivity() {
             guardarPerfil()
         }
 
-     /*   btnVolver.setOnClickListener {
+        btnVolver.setOnClickListener {
             finish()
-        }*/
+        }
     }
 
     private fun inicializarVistas() {
         etNombre = findViewById(R.id.etNombre)
         etCorreo = findViewById(R.id.etCorreo)
-        rgTema = findViewById(R.id.rgTema)
-        rbClaro = findViewById(R.id.rbClaro)
-        rbOscuro = findViewById(R.id.rbOscuro)
         swNotificaciones = findViewById(R.id.swNotificaciones)
         btnGuardar = findViewById(R.id.btGuardar)
+        btnVolver = findViewById(R.id.btVolver)
     }
 
     private fun observarPerfil() {
@@ -66,14 +61,7 @@ class PerfilActivity : AppCompatActivity() {
                 etNombre.setText(perfil.nombre)
                 etCorreo.setText(perfil.correo)
 
-                if (perfil.tema == "Oscuro") {
-                    rbOscuro.isChecked = true
-                } else {
-                    rbClaro.isChecked = true
-                }
-
                 swNotificaciones.isChecked = perfil.notificaciones
-                aplicarTema(perfil.tema)
             }
         }
     }
@@ -92,17 +80,11 @@ class PerfilActivity : AppCompatActivity() {
             return
         }
 
-        val tema = when (rgTema.checkedRadioButtonId) {
-            R.id.rbOscuro -> "Oscuro"
-            else -> "Claro"
-        }
-
         val notificaciones = swNotificaciones.isChecked
 
         perfilViewModel.guardarPerfil(
             nombre = nombre,
             correo = correo,
-            tema = tema,
             notificaciones = notificaciones
         )
 
@@ -111,13 +93,5 @@ class PerfilActivity : AppCompatActivity() {
             "Perfil guardado correctamente",
             Toast.LENGTH_SHORT
         ).show()
-    }
-
-    private fun aplicarTema(tema: String) {
-        if (tema == "Oscuro") {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
     }
 }

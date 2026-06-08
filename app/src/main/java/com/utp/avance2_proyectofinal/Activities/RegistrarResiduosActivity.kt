@@ -3,6 +3,7 @@ package com.utp.avance2_proyectofinal.Activities
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -25,8 +26,21 @@ class RegistrarResiduosActivity: AppCompatActivity(){
     private lateinit var btAgregar: Button
     private lateinit var btHistorial: Button
 
+    private lateinit var btnVovler : Button
+
     private val categorias = listOf("Plástico", "Vidrio", "Papel", "Metal", "Electrónico", "Orgánico")
     private val unidades    = listOf("kg", "g", "lb", "unidades")
+
+    private val historialLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            etCantidad.text.clear()
+            etOrigen.text.clear()
+            cbConfirmar.isChecked = false
+            Toast.makeText(this, "Volviste del historial", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +53,7 @@ class RegistrarResiduosActivity: AppCompatActivity(){
         cbConfirmar  = findViewById(R.id.cbConfirmar)
         btAgregar    = findViewById(R.id.btAgregar)
         btHistorial  = findViewById(R.id.btHistorial)
+        btnVovler    = findViewById(R.id.btVolver)
 
         spCategoria.adapter = ArrayAdapter(this,
             android.R.layout.simple_spinner_item, categorias).also {
@@ -51,7 +66,11 @@ class RegistrarResiduosActivity: AppCompatActivity(){
         btAgregar.setOnClickListener { validarYGuardar() }
 
         btHistorial.setOnClickListener {
-            startActivity(Intent(this, HistorialResiduosActivity::class.java))
+            historialLauncher.launch(Intent(this, HistorialResiduosActivity::class.java))
+        }
+
+        btnVovler.setOnClickListener {
+            finish()
         }
 
         observarViewModel()

@@ -51,51 +51,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNombre" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="321dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="14dp"
-        android:text="Tema visual"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
-
-    <RadioGroup
-        android:id="@+id/rgTema"
-        android:layout_width="325dp"
-        android:layout_height="53dp"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="22dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
-
-        <RadioButton
-            android:id="@+id/rbClaro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Claro" />
-
-        <RadioButton
-            android:id="@+id/rbOscuro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="Oscuro" />
-
-    </RadioGroup>
-
     <Switch
         android:id="@+id/swNotificaciones"
         android:layout_width="325dp"
         android:layout_height="31dp"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="11dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="23dp"
         android:text="Recibir notificaciones"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rgTema" />
+        app:layout_constraintTop_toBottomOf="@+id/etCorreo" />
 
     <Button
         android:id="@+id/btGuardar"

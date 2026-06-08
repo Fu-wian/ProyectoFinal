@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <!-- Formulario -->
+
     <LinearLayout
         android:layout_width="375dp"
         android:layout_height="698dp"
@@ -104,7 +105,15 @@
             android:id="@+id/btHistorial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Ver Historial" />
+
+        <Button
+            android:id="@+id/btVolver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Volver"
+            app:layout_constraintTop_toBottomOf="@+id/btHistorial" />
 
     </LinearLayout>
 

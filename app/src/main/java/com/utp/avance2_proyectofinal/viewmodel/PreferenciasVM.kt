@@ -26,13 +26,11 @@ class PreferenciasVM (application: Application) : AndroidViewModel(application) 
     fun guardarPerfil(
         nombre: String,
         correo: String,
-        tema: String,
         notificaciones: Boolean
     ) {
         val nuevoPerfil = PerfilUsuario(
             nombre = nombre,
             correo = correo,
-            tema = tema,
             notificaciones = notificaciones
         )
 

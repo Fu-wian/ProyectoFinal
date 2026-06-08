@@ -20,6 +20,14 @@ class EcoSpotActivity : AppCompatActivity() {
 
         val mapaBoton = findViewById<Button>(R.id.btnMapal)
 
+        val btVolver = findViewById<Button>(R.id.btnVolver)
+
+        btVolver.setOnClickListener {
+            finish()
+        }
+
+        //Boton de filtrar falta por implementar para el proyecto final
+
         mapaBoton.setOnClickListener {
             val uri = Uri.parse("google.navigation:q=9.0152,-79.5312") // Coordenadas de ejemplo de la UTP, Panamá
             val intent = Intent(Intent.ACTION_VIEW, uri)

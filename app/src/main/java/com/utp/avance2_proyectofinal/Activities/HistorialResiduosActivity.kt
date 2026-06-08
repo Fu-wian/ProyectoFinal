@@ -23,7 +23,10 @@ class HistorialResiduosActivity : AppCompatActivity(){
 
         listView  = findViewById(R.id.listView)
         btnVolver = findViewById(R.id.btnVolver)
-        btnVolver.setOnClickListener { finish() }
+        btnVolver.setOnClickListener {
+            setResult(RESULT_OK)
+            finish()
+        }
 
         configurarListView()
         observarViewModel()
