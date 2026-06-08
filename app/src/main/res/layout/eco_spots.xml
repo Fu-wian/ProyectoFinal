@@ -93,6 +93,7 @@
                 android:text="Ciudad de Panamá" />
 
             <Button
+                android:id="@+id/btnMapal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ven en el mapa" />
