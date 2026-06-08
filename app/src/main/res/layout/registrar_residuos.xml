@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Formulario -->
+    <LinearLayout
+        android:layout_width="375dp"
+        android:layout_height="698dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="Nuevo Residuo"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Categoría:" />
+
+        <Spinner
+            android:id="@+id/spCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp" />
+
+        <ImageView
+            android:id="@+id/ImagenCategoria"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/cosas_que_se_pueden_reciclar_2884_orig"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cantidad:" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etCantidad"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:hint="Ingrese Número"
+                android:inputType="numberDecimal"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/spUnidad"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Origen del Residuo:" />
+
+        <EditText
+            android:id="@+id/etOrigen"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginBottom="8dp"
+            android:hint="Inserte el origen"
+            android:inputType="text" />
+
+        <CheckBox
+            android:id="@+id/cbConfirmar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Confirmo que todos los datos son correctos" />
+
+        <Button
+            android:id="@+id/btAgregar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Agregar Residuo" />
+
+        <Button
+            android:id="@+id/btHistorial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ver Historial" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

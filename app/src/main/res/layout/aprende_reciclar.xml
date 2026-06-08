@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="378dp"
+        android:layout_height="45dp"
+        android:text="Aprende a reciclar"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="18dp"
+        tools:layout_editor_absoluteY="18dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView7"
+        android:layout_width="376dp"
+        android:layout_height="215dp"
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="94dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/dsiewe" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:ellipsize="none"
+        android:maxLines="12"
+        android:text="El reciclaje es una de las herramientas más poderosas y accesibles que tenemos para proteger nuestro planeta. Al transformar materiales usados como el plástico, el vidrio y el papel en nuevos productos, reducimos drásticamente la necesidad de extraer recursos naturales de la Tierra. Además, este proceso disminuye la acumulación de basura en los vertederos, ahorra grandes cantidades de energía y mitiga la contaminación del aire y del agua. Adoptar el hábito de reciclar en nuestra vida diaria no es solo un acto de responsabilidad ecológica, sino un compromiso vital para asegurar un futuro más limpio, saludable y sostenible para las próximas generaciones."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView7"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <RadioButton
+        android:id="@+id/radioButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="opcion#1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="547dp"></RadioButton>
+
+    <RadioButton
+        android:id="@+id/radioButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="opcion#2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.056"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioButton3"
+        app:layout_constraintVertical_bias="0.0"></RadioButton>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
