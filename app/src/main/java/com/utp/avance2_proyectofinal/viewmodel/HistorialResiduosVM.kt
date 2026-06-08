@@ -34,4 +34,10 @@ class HistorialResiduosVM(application: Application) : AndroidViewModel(applicati
             cargarResiduos()
         }
     }
+    fun editarResiduo(residuo: RegistrarResiduos) {
+        viewModelScope.launch {
+            repository.actualizar(residuo)
+            cargarResiduos()
+        }
+    }
 }

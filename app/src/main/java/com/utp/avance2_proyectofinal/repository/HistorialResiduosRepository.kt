@@ -22,4 +22,9 @@ class HistorialResiduosRepository(context: Context) {
         kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
             db.contarResiduos()
         }
+
+    suspend fun actualizar(r: RegistrarResiduos): Int =
+        kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            db.actualizarResiduo(r)
+        }
 }

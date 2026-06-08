@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Avance2_ProyectoFinal">
 
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.RegistrarResiduosActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.RegistrarResiduosActivity" />
         <activity android:name=".Activities.HistorialResiduosActivity" />
 
     </application>
