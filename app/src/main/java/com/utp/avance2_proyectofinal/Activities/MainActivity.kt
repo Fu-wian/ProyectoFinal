@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         val cardPerfil = findViewById<CardView>(R.id.CardPerfil)
         val cardHistorial = findViewById<CardView>(R.id.CardHistorial)
         val cardRegistrar = findViewById<CardView>(R.id.cardRegistrar)
+        val cardImpacto = findViewById<CardView>(R.id.CardImpacto)
         val cardEcospot = findViewById<CardView>(R.id.EcoSpots)
 
         cardPerfil.setOnClickListener {
@@ -41,7 +42,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(PerfilActivity.EXTRA_NOMBRE_USUARIO,"Extra_Registrar")
             startActivity(intent)
         }
-
+        cardImpacto.setOnClickListener {
+            val intent = Intent(this, ImpactoAmbientalActivity::class.java)
+            intent.putExtra(ImpactoAmbientalActivity.EXTRA_NOMBRE_USUARIO, "extra_Impacto")
+            startActivity(intent)
+        }
         cardEcospot.setOnClickListener {
             val intent = Intent(this, EcoSpotActivity::class.java)
             intent.putExtra(EcoSpotActivity.EXTRA_NOMBRE_USUARIO,"extra_Ecospot")
