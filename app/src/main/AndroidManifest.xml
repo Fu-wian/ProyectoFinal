@@ -35,6 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.ImpactoAmbientalActivity"/>
         <activity android:name=".Activities.PerfilActivity"/>
         <activity android:name=".Activities.RegistrarResiduosActivity"/>
         <activity android:name=".Activities.HistorialResiduosActivity"/>
