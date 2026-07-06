@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
         cardEcospot.setOnClickListener {
             val intent = Intent(this, EcoSpotActivity::class.java)
-            intent.putExtra(EcoSpotActivity.EXTRA_NOMBRE_USUARIO,"extra_Ecospot")
             startActivity(intent)
         }
 

@@ -1,49 +1,158 @@
 package com.utp.avance2_proyectofinal.Activities
 
 import android.content.Intent
-import android.net.Uri // 1. IMPORTACIÓN CORRECTA PARA Uri.parse
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.utp.avance2_proyectofinal.R
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AlertDialog
+import com.utp.avance2_proyectofinal.data.EcoSpot
 
-class EcoSpotActivity : AppCompatActivity() {
+class EcoSpotActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    companion object {
-        const val EXTRA_NOMBRE_USUARIO = "extra_Ecospot"
-    }
+    private lateinit var googleMap: GoogleMap
+
+    private val solicitarPermisoUbicacion =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { permisoConcedido ->
+            if (permisoConcedido) {
+                activarUbicacionUsuario()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Permiso de ubicación denegado",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    private val puntosReciclaje = listOf(
+        EcoSpot(
+            nombre = "Eco Spot UTP",
+            descripcion = "Acepta plástico, papel, cartón y residuos reciclables.",
+            latitud = 9.0227,
+            longitud = -79.5317
+        ),
+        EcoSpot(
+            nombre = "Eco Spot Multiplaza",
+            descripcion = "Punto de reciclaje para plástico, vidrio y cartón.",
+            latitud = 9.0109,
+            longitud = -79.4936
+        ),
+        EcoSpot(
+            nombre = "Eco Spot Parque Omar",
+            descripcion = "Punto de reciclaje comunitario.",
+            latitud = 9.0043,
+            longitud = -79.5081
+        )
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.eco_spots)
 
-        val mapaBoton = findViewById<Button>(R.id.btnMapal)
+        val btnVolver = findViewById<Button>(R.id.btnVolverEcoSpots)
 
-        val btVolver = findViewById<Button>(R.id.btnVolver)
-
-        btVolver.setOnClickListener {
+        btnVolver.setOnClickListener {
             finish()
         }
 
-        //Boton de filtrar falta por implementar para el proyecto final
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.mapEcoSpots) as SupportMapFragment
 
-        mapaBoton.setOnClickListener {
-            val uri = Uri.parse("google.navigation:q=9.0152,-79.5312") // Coordenadas de ejemplo de la UTP, Panamá
-            val intent = Intent(Intent.ACTION_VIEW, uri)
+        mapFragment.getMapAsync(this)
+    }
 
-            // Forzar a que intente abrir directamente la app de Google Maps
-            intent.setPackage("com.google.android.apps.maps")
+    private fun activarUbicacionUsuario() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            googleMap.isMyLocationEnabled = true
+            googleMap.uiSettings.isMyLocationButtonEnabled = true
+        } else {
+            solicitarPermisoUbicacion.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
 
-            // 2. SE REMOVIÓ LA PRIMERA LLAMADA REPETIDA DE startActivity(intent)
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            } else {
-                // Si el usuario deshabilitó Maps, intentamos abrir la versión web como respaldo
-                val webUri = Uri.parse("https://www.google.com/maps")
-                val webIntent = Intent(Intent.ACTION_VIEW, webUri)
-                startActivity(webIntent)
+    override fun onMapReady(mapa: GoogleMap) {
+        googleMap = mapa
+
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        googleMap.uiSettings.isMapToolbarEnabled = true
+
+        activarUbicacionUsuario()
+
+        agregarMarcadores()
+
+        val ubicacionInicial = LatLng(9.0227, -79.5317)
+        googleMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(ubicacionInicial, 13f)
+        )
+
+        googleMap.setOnMarkerClickListener { marker ->
+            val ecoSpot = marker.tag as? EcoSpot
+
+            if (ecoSpot != null) {
+                mostrarInformacionEcoSpot(ecoSpot)
             }
+
+            true
+        }
+    }
+
+    private fun agregarMarcadores() {
+        for (punto in puntosReciclaje) {
+            val ubicacion = LatLng(punto.latitud, punto.longitud)
+
+            val marker: Marker? = googleMap.addMarker(
+                MarkerOptions()
+                    .position(ubicacion)
+                    .title(punto.nombre)
+                    .snippet(punto.descripcion)
+            )
+
+            marker?.tag = punto
+        }
+    }
+
+    private fun mostrarInformacionEcoSpot(ecoSpot: EcoSpot) {
+        AlertDialog.Builder(this)
+            .setTitle(ecoSpot.nombre)
+            .setMessage(ecoSpot.descripcion)
+            .setPositiveButton("Ver ruta") { _, _ ->
+                abrirUbicacionEnGoogleMaps(ecoSpot)
+            }
+            .setNegativeButton("Cerrar", null)
+            .show()
+    }
+
+    private fun abrirUbicacionEnGoogleMaps(ecoSpot: EcoSpot) {
+        val uri = Uri.parse("google.navigation:q=${ecoSpot.latitud},${ecoSpot.longitud}")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.setPackage("com.google.android.apps.maps")
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            val webUri = Uri.parse(
+                "https://www.google.com/maps/search/?api=1&query=${ecoSpot.latitud},${ecoSpot.longitud}"
+            )
+            val webIntent = Intent(Intent.ACTION_VIEW, webUri)
+            startActivity(webIntent)
         }
     }
 }
