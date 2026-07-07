@@ -46,7 +46,7 @@ class HistorialResiduosActivity : AppCompatActivity(){
                                 .setTitle("Eliminar registro")
                                 .setMessage("¿Eliminar ${item.categoria} — ${item.cantidad} ${item.unidad}?")
                                 .setPositiveButton("Eliminar") { _, _ ->
-                                    viewModel.eliminarResiduo(item.id)
+                                    viewModel.eliminarResiduo(item.id) //Ver funcion del viewmodel
                                 }
                                 .setNegativeButton("Cancelar", null)
                                 .show()

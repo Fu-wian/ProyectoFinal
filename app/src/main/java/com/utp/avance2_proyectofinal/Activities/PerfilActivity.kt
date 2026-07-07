@@ -70,6 +70,7 @@ class PerfilActivity : AppCompatActivity() {
         val nombre = etNombre.text.toString().trim()
         val correo = etCorreo.text.toString().trim()
 
+        //Validacion de errores
         if (nombre.isEmpty()) {
             etNombre.error = "Ingrese su nombre"
             return
