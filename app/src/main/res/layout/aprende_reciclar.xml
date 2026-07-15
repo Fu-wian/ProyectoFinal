@@ -1,67 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F4F9F4"
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="378dp"
-        android:layout_height="45dp"
-        android:text="Aprende a reciclar"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        tools:layout_editor_absoluteX="18dp"
-        tools:layout_editor_absoluteY="18dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView7"
-        android:layout_width="376dp"
-        android:layout_height="215dp"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="94dp">
-
-        <ImageView
+        <!-- Encabezado -->
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/dsiewe" />
-    </androidx.cardview.widget.CardView>
+            android:text="🌱 Aprende a Reciclar"
+            android:textColor="#1B5E20"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="380dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:ellipsize="none"
-        android:maxLines="12"
-        android:text="El reciclaje es una de las herramientas más poderosas y accesibles que tenemos para proteger nuestro planeta. Al transformar materiales usados como el plástico, el vidrio y el papel en nuevos productos, reducimos drásticamente la necesidad de extraer recursos naturales de la Tierra. Además, este proceso disminuye la acumulación de basura en los vertederos, ahorra grandes cantidades de energía y mitiga la contaminación del aire y del agua. Adoptar el hábito de reciclar en nuestra vida diaria no es solo un acto de responsabilidad ecológica, sino un compromiso vital para asegurar un futuro más limpio, saludable y sostenible para las próximas generaciones."
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView7"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="Lee, aprende y pon a prueba tus conocimientos"
+            android:textColor="#66796B"
+            android:textSize="13sp" />
 
-    <RadioButton
-        android:id="@+id/radioButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="opcion#1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.056"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="547dp"></RadioButton>
+        <!-- Tarjeta: imagen + texto educativo -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
-    <RadioButton
-        android:id="@+id/radioButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="opcion#2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.056"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioButton3"
-        app:layout_constraintVertical_bias="0.0"></RadioButton>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:contentDescription="Materiales reciclables"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/dsiewe" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4dp"
+                    android:padding="16dp"
+                    android:text="El reciclaje es una de las herramientas más poderosas y accesibles que tenemos para proteger nuestro planeta. Al transformar materiales usados como el plástico, el vidrio y el papel en nuevos productos, reducimos la necesidad de extraer recursos naturales, disminuimos la basura en los vertederos, ahorramos energía y mitigamos la contaminación del aire y del agua. Reciclar a diario es un compromiso vital para un futuro más limpio y sostenible."
+                    android:textColor="#37474F"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Tarjeta: quiz -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvProgresoQuiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pregunta 1 de 5"
+                    android:textColor="#66796B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvPregunta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="¿Cuál de estos materiales tarda más en degradarse?"
+                    android:textColor="#1B5E20"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/rgOpciones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/rbOpcion1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#37474F"
+                        android:textSize="14sp"
+                        app:buttonTint="#2E7D32" />
+
+                    <RadioButton
+                        android:id="@+id/rbOpcion2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#37474F"
+                        android:textSize="14sp"
+                        app:buttonTint="#2E7D32" />
+
+                    <RadioButton
+                        android:id="@+id/rbOpcion3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#37474F"
+                        android:textSize="14sp"
+                        app:buttonTint="#2E7D32" />
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/tvRetroalimentacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnResponder"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#2E7D32"
+                    android:text="Responder"
+                    android:textColor="#FFFFFF"
+                    app:cornerRadius="14dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Botón volver -->
+        <Button
+            android:id="@+id/btnVolverAprende"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Volver"
+            android:textColor="#66796B"
+            style="@style/Widget.Material3.Button.TextButton" />
+
+    </LinearLayout>
+</ScrollView>

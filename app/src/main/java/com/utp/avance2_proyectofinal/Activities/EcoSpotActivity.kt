@@ -21,7 +21,10 @@ import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
 import com.utp.avance2_proyectofinal.data.EcoSpot
 
-class EcoSpotActivity : AppCompatActivity(), OnMapReadyCallback {
+class EcoSpotActivity : BaseActivity(), OnMapReadyCallback {
+
+
+    override fun obtenerItemMenu() = R.id.nav_ecospots
 
     private lateinit var googleMap: GoogleMap
 

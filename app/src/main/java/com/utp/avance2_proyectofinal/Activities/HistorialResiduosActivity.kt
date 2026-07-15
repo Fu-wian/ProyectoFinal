@@ -11,7 +11,10 @@ import com.utp.avance2_proyectofinal.R
 import com.utp.avance2_proyectofinal.viewmodel.HistorialResiduosVM
 import kotlinx.coroutines.launch
 
-class HistorialResiduosActivity : AppCompatActivity(){
+class HistorialResiduosActivity : BaseActivity(){
+
+    override fun obtenerItemMenu() = R.id.nav_historial
+
     private val viewModel: HistorialResiduosVM by viewModels()
 
     private lateinit var listView: ListView

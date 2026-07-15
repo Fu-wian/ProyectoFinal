@@ -1,17 +1,26 @@
 package com.utp.avance2_proyectofinal.Activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.utp.avance2_proyectofinal.R
 import com.utp.avance2_proyectofinal.viewmodel.RegistrarResiduosVM
 import kotlinx.coroutines.launch
+import java.io.File
+import androidx.appcompat.app.AlertDialog
+import androidx.activity.result.PickVisualMediaRequest
 
-class RegistrarResiduosActivity: AppCompatActivity(){
+class RegistrarResiduosActivity: BaseActivity(){
+
+    override fun obtenerItemMenu() = R.id.nav_registrar
+
     companion object {
         const val RESULT_RESIDUO_AGREGADO = "extra_registrar"
     }
@@ -25,8 +34,11 @@ class RegistrarResiduosActivity: AppCompatActivity(){
     private lateinit var cbConfirmar: CheckBox
     private lateinit var btAgregar: Button
     private lateinit var btHistorial: Button
+    private lateinit var btnVovler: Button
 
-    private lateinit var btnVovler : Button
+    // NUEVO: ImageView de la categoría y su Uri de foto
+    private lateinit var imagenCategoria: ImageView
+    private var fotoUri: Uri? = null
 
     private val categorias = listOf("Plástico", "Vidrio", "Papel", "Metal", "Electrónico", "Orgánico")
     private val unidades    = listOf("kg", "g", "lb", "unidades")
@@ -42,6 +54,17 @@ class RegistrarResiduosActivity: AppCompatActivity(){
         }
     }
 
+    // NUEVO: launcher para tomar la foto
+    private val tomarFotoLauncher = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { exito ->
+        if (exito) {
+            mostrarFoto(fotoUri)
+        } else {
+            Toast.makeText(this, "No se pudo tomar la foto", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registrar_residuos)
@@ -54,6 +77,9 @@ class RegistrarResiduosActivity: AppCompatActivity(){
         btAgregar    = findViewById(R.id.btAgregar)
         btHistorial  = findViewById(R.id.btHistorial)
         btnVovler    = findViewById(R.id.btVolver)
+        imagenCategoria = findViewById(R.id.ImagenCategoria)
+
+
 
         spCategoria.adapter = ArrayAdapter(this,
             android.R.layout.simple_spinner_item, categorias).also {
@@ -73,7 +99,64 @@ class RegistrarResiduosActivity: AppCompatActivity(){
             finish()
         }
 
+        // NUEVO: click en el ImageView abre la cámara
+        imagenCategoria.setOnClickListener {
+            mostrarOpcionesImagen()
+        }
+
         observarViewModel()
+    }
+
+    // NUEVO: crea el archivo ANTES de lanzar el launcher
+    private fun abrirCamara() {
+        val uri = crearArchivoFoto() // esto ya devuelve Uri no-nulo
+        fotoUri = uri
+        tomarFotoLauncher.launch(uri) // pasamos el Uri no-nulo directamente
+    }
+
+    private fun crearArchivoFoto(): Uri {
+        val dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val archivo = File(
+            dir,
+            "foto_${System.currentTimeMillis()}.jpg"
+        )
+        // FileProvider convierte file:// → content://
+        return FileProvider.getUriForFile(
+            this,
+            "${packageName}.fileprovider",
+            archivo
+        )
+    }
+
+    private fun mostrarFoto(uri: Uri?) {
+        uri ?: return
+        imagenCategoria.setImageURI(uri)
+    }
+
+    private fun mostrarOpcionesImagen() {
+        val opciones = arrayOf("Tomar foto", "Elegir de galería")
+        AlertDialog.Builder(this)
+            .setTitle("Agregar imagen")
+            .setItems(opciones) { _, which ->
+                when (which) {
+                    0 -> abrirCamara()
+                    1 -> elegirDeGaleriaLauncher.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                }
+            }
+            .show()
+    }
+
+    private val elegirDeGaleriaLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            fotoUri = uri
+            mostrarFoto(uri)
+        } else {
+            Toast.makeText(this, "No se seleccionó ninguna imagen", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun validarYGuardar() {

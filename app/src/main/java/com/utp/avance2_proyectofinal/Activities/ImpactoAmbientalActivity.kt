@@ -18,7 +18,9 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
 
-class ImpactoAmbientalActivity : AppCompatActivity() {
+class ImpactoAmbientalActivity :  BaseActivity(){
+
+    override fun obtenerItemMenu() = R.id.nav_inicio
 
     companion object {
         const val EXTRA_NOMBRE_USUARIO = "extra_Impacto"
@@ -69,7 +71,6 @@ class ImpactoAmbientalActivity : AppCompatActivity() {
             findViewById(R.id.tvValDom)
         )
 
-        findViewById<Button>(R.id.btnVolver).setOnClickListener { finish() }
         findViewById<Button>(R.id.btnAgregarResiduos).setOnClickListener {
             startActivity(Intent(this, RegistrarResiduosActivity::class.java))
         }
