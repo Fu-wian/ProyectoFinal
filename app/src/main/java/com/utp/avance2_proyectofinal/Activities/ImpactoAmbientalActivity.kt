@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -74,7 +75,12 @@ class ImpactoAmbientalActivity :  BaseActivity(){
         findViewById<Button>(R.id.btnAgregarResiduos).setOnClickListener {
             startActivity(Intent(this, RegistrarResiduosActivity::class.java))
         }
-
+        findViewById<ImageButton>(R.id.btnSemanaAnterior).setOnClickListener {
+            viewModel.semanaAnterior()
+        }
+        findViewById<ImageButton>(R.id.btnSemanaSiguiente).setOnClickListener {
+            viewModel.semanaSiguiente()
+        }
         observarViewModel()
     }
 
@@ -103,7 +109,9 @@ class ImpactoAmbientalActivity :  BaseActivity(){
                 val arboles = (imp.co2EvitadoKg / 21.0)   // un árbol absorbe ~21 kg de CO2 al año
                 tvCantidadReciclada.text = String.format(Locale.getDefault(), "%.1f", arboles)
                 tvDetalleReciclado.text = "árboles plantados (equiv. anual)"
-
+                val btnSiguiente = findViewById<ImageButton>(R.id.btnSemanaSiguiente)
+                btnSiguiente.isEnabled = !imp.esSemanaActual
+                btnSiguiente.alpha = if (imp.esSemanaActual) 0.3f else 1f
                 actualizarGrafica(imp.porDia)
                 mostrarCategorias(imp.porCategoria, imp.totalKg)
             }
@@ -153,6 +161,7 @@ class ImpactoAmbientalActivity :  BaseActivity(){
             fila.addView(TextView(this).apply {
                 text = categoria
                 textSize = 12f
+                setTextColor(Color.parseColor("#37474F"))
                 layoutParams = LinearLayout.LayoutParams(
                     (90 * densidad).toInt(), LinearLayout.LayoutParams.WRAP_CONTENT
                 )

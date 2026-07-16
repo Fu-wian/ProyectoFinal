@@ -33,6 +33,21 @@ class HistorialResiduosActivity : BaseActivity(){
 
         configurarListView()
         observarViewModel()
+
+        val spFiltro = findViewById<Spinner>(R.id.spFiltroCategoria)
+        val opcionesFiltro = listOf("Todas las categorías", "Plástico", "Vidrio", "Papel", "Metal", "Electrónico", "Orgánico")
+
+        spFiltro.adapter = ArrayAdapter(this, R.layout.spinner_item, opcionesFiltro).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+
+        spFiltro.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val filtro = if (position == 0) null else opcionesFiltro[position]
+                viewModel.cargarResiduos(filtro)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     private fun configurarListView() {
@@ -130,15 +145,21 @@ class HistorialResiduosActivity : BaseActivity(){
     private fun observarViewModel() {
         lifecycleScope.launch {
             viewModel.residuos.collect { lista ->
-                val textos = lista.map {
-                    "${it.categoria} — ${it.cantidad} ${it.unidad}\nOrigen: ${it.origen}  |  ${it.fecha}"
+                listView.adapter = object : ArrayAdapter<RegistrarResiduos>(
+                    this@HistorialResiduosActivity, R.layout.item_residuo, lista
+                ) {
+                    override fun getView(position: Int, convertView: View?, parent: android.view.ViewGroup): View {
+                        val view = convertView ?: layoutInflater.inflate(R.layout.item_residuo, parent, false)
+                        val item = lista[position]
+                        view.findViewById<TextView>(R.id.tvTitulo).text = "${item.categoria} — ${item.cantidad} ${item.unidad}"
+                        view.findViewById<TextView>(R.id.tvDetalle).text = "Origen: ${item.origen}  |  ${item.fecha}"
+                        return view
+                    }
                 }
-                listView.adapter = ArrayAdapter(
-                    this@HistorialResiduosActivity,
-                    android.R.layout.simple_list_item_2,
-                    android.R.id.text1,
-                    textos
-                )
+                val total = viewModel.totalCount.value
+                findViewById<TextView>(R.id.tvContador).text =
+                    if (lista.size == total) "$total registros"
+                    else "${lista.size} de $total registros"
             }
         }
     }

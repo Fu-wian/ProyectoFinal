@@ -26,8 +26,11 @@
     <Button
         android:id="@+id/btnVolverEcoSpots"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
+        android:layout_margin="16dp"
+        android:backgroundTint="#2E7D32"
         android:text="Volver"
-        android:layout_margin="16dp" />
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
 
 </LinearLayout>

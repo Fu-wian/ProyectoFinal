@@ -23,9 +23,10 @@ class RegistrarResiduosVM (application: Application): AndroidViewModel(applicati
         categoria: String,
         cantidad: Double,
         unidad: String,
-        origen: String
+        origen: String,
+        fecha: Date = Date()
     ) {
-        val fecha = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+        val fechaStr = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(fecha)
         viewModelScope.launch {
             repository.agregar(
                 RegistrarResiduos(
@@ -33,11 +34,12 @@ class RegistrarResiduosVM (application: Application): AndroidViewModel(applicati
                     cantidad  = cantidad,
                     unidad    = unidad,
                     origen    = origen,
-                    fecha     = fecha
+                    fecha = fechaStr
                 )
             )
             _guardado.value = true
         }
+
     }
 
     fun resetGuardado() {

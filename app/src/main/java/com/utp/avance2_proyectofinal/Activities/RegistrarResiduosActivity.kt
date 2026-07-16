@@ -14,6 +14,10 @@ import com.utp.avance2_proyectofinal.R
 import com.utp.avance2_proyectofinal.viewmodel.RegistrarResiduosVM
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.Locale
+import android.app.DatePickerDialog
 import androidx.appcompat.app.AlertDialog
 import androidx.activity.result.PickVisualMediaRequest
 
@@ -39,10 +43,11 @@ class RegistrarResiduosActivity: BaseActivity(){
     // NUEVO: ImageView de la categoría y su Uri de foto
     private lateinit var imagenCategoria: ImageView
     private var fotoUri: Uri? = null
-
+    private lateinit var etFecha: EditText
+    private var fechaSeleccionada: Calendar = Calendar.getInstance()
     private val categorias = listOf("Plástico", "Vidrio", "Papel", "Metal", "Electrónico", "Orgánico")
     private val unidades    = listOf("kg", "g", "lb", "unidades")
-
+    private val formatoVisible = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val historialLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -78,15 +83,15 @@ class RegistrarResiduosActivity: BaseActivity(){
         btHistorial  = findViewById(R.id.btHistorial)
         btnVovler    = findViewById(R.id.btVolver)
         imagenCategoria = findViewById(R.id.ImagenCategoria)
-
+        etFecha      = findViewById(R.id.etFecha)
 
 
         spCategoria.adapter = ArrayAdapter(this,
-            android.R.layout.simple_spinner_item, categorias).also {
+            R.layout.spinner_item, categorias).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
 
         spUnidad.adapter = ArrayAdapter(this,
-            android.R.layout.simple_spinner_item, unidades).also {
+            R.layout.spinner_item, unidades).also {
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
 
         btAgregar.setOnClickListener { validarYGuardar() }
@@ -103,7 +108,21 @@ class RegistrarResiduosActivity: BaseActivity(){
         imagenCategoria.setOnClickListener {
             mostrarOpcionesImagen()
         }
-
+        etFecha.setText(formatoVisible.format(fechaSeleccionada.time))  // default: hoy
+        etFecha.setOnClickListener {
+            DatePickerDialog(
+                this,
+                { _, año, mes, dia ->
+                    fechaSeleccionada.set(año, mes, dia)
+                    etFecha.setText(formatoVisible.format(fechaSeleccionada.time))
+                },
+                fechaSeleccionada.get(Calendar.YEAR),
+                fechaSeleccionada.get(Calendar.MONTH),
+                fechaSeleccionada.get(Calendar.DAY_OF_MONTH)
+            ).apply {
+                datePicker.maxDate = System.currentTimeMillis()  // bloquea fechas futuras
+            }.show()
+        }
         observarViewModel()
     }
 
@@ -174,19 +193,28 @@ class RegistrarResiduosActivity: BaseActivity(){
             categoria = spCategoria.selectedItem.toString(),
             cantidad  = cantidadStr.toDouble(),
             unidad    = spUnidad.selectedItem.toString(),
-            origen    = origen
+            origen    = origen,
+            fecha     = fechaSeleccionada.time   // ← nuevo
         )
     }
-
+    private fun limpiarFormulario() {
+        etCantidad.text.clear()
+        etOrigen.text.clear()
+        cbConfirmar.isChecked = false
+        spCategoria.setSelection(0)
+        spUnidad.setSelection(0)
+        etCantidad.requestFocus()
+        fechaSeleccionada = Calendar.getInstance()
+        etFecha.setText(formatoVisible.format(fechaSeleccionada.time))
+    }
     private fun observarViewModel() {
         lifecycleScope.launch {
             viewModel.guardado.collect { guardado ->
                 if (guardado) {
                     Toast.makeText(this@RegistrarResiduosActivity,
                         "Residuo registrado", Toast.LENGTH_SHORT).show()
-                    setResult(RESULT_OK, Intent().putExtra(RESULT_RESIDUO_AGREGADO, true))
                     viewModel.resetGuardado()
-                    finish()
+                    limpiarFormulario()
                 }
             }
         }

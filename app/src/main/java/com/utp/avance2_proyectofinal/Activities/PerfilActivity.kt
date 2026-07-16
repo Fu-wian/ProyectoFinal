@@ -5,11 +5,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.switchmaterial.SwitchMaterial
 import androidx.lifecycle.lifecycleScope
 import com.utp.avance2_proyectofinal.R
 import com.utp.avance2_proyectofinal.viewmodel.PreferenciasVM
@@ -23,9 +23,9 @@ class PerfilActivity : AppCompatActivity() {
 
     private lateinit var etNombre: EditText
     private lateinit var etCorreo: EditText
-    private lateinit var swNotificaciones: Switch
-    private lateinit var btnGuardar: Button
 
+    private lateinit var btnGuardar: Button
+    private lateinit var swNotificaciones: SwitchMaterial
     private lateinit var btnVolver: Button
 
     private val perfilViewModel: PreferenciasVM by viewModels()
