@@ -120,6 +120,7 @@ class DetalleResiduoActivity : AppCompatActivity() {   // hija → AppCompatActi
                 .setNegativeButton("Cancelar", null)
                 .show()
         }
+        findViewById<Button>(R.id.btVolverDet).setOnClickListener { finish() }
     }
 
     private fun adapterSimple(items: Array<String>) =

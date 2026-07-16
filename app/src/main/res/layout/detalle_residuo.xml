@@ -143,5 +143,14 @@
             android:textColor="#C62828"
             style="@style/Widget.Material3.Button.TextButton" />
 
+        <Button
+            android:id="@+id/btVolverDet"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="4dp"
+            android:text="Volver"
+            android:textColor="#66796B"
+            style="@style/Widget.Material3.Button.TextButton" />
+
     </LinearLayout>
 </ScrollView>
