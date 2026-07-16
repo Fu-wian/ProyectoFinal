@@ -41,6 +41,9 @@
         <activity android:name=".Activities.HistorialResiduosActivity"/>
         <activity android:name=".Activities.EcoSpotActivity"/>
         <activity android:name=".Activities.ConfiguracionesActivity"/>
+        <activity android:name=".Activities.RecompensasActivity" />
+        <activity android:name=".Activities.DetalleResiduoActivity" />
+        <activity android:name=".Activities.CanjeActivity" />
 
 
         <provider

@@ -1,27 +1,29 @@
 package com.utp.avance2_proyectofinal.Activities
 
+import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.utp.avance2_proyectofinal.R
 import com.utp.avance2_proyectofinal.viewmodel.RegistrarResiduosVM
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.Calendar
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
-import android.app.DatePickerDialog
-import androidx.appcompat.app.AlertDialog
-import androidx.activity.result.PickVisualMediaRequest
 
-class RegistrarResiduosActivity: BaseActivity(){
+class RegistrarResiduosActivity : BaseActivity() {
 
     override fun obtenerItemMenu() = R.id.nav_registrar
 
@@ -38,28 +40,25 @@ class RegistrarResiduosActivity: BaseActivity(){
     private lateinit var cbConfirmar: CheckBox
     private lateinit var btAgregar: Button
     private lateinit var btHistorial: Button
-    private lateinit var btnVovler: Button
 
-    // NUEVO: ImageView de la categoría y su Uri de foto
     private lateinit var imagenCategoria: ImageView
     private var fotoUri: Uri? = null
     private lateinit var etFecha: EditText
     private var fechaSeleccionada: Calendar = Calendar.getInstance()
-    private val categorias = listOf("Plástico", "Vidrio", "Papel", "Metal", "Electrónico", "Orgánico")
-    private val unidades    = listOf("kg", "g", "lb", "unidades")
+
+    private val categorias = listOf("Seleccione categoría", "Plástico", "Vidrio", "Papel", "Metal", "Electrónico", "Orgánico")
+    private val unidades   = listOf("Seleccione unidad", "kg", "g", "lb", "unidades")
     private val formatoVisible = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
     private val historialLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            etCantidad.text.clear()
-            etOrigen.text.clear()
-            cbConfirmar.isChecked = false
+            limpiarFormulario()
             Toast.makeText(this, "Volviste del historial", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // NUEVO: launcher para tomar la foto
     private val tomarFotoLauncher = registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { exito ->
@@ -70,29 +69,33 @@ class RegistrarResiduosActivity: BaseActivity(){
         }
     }
 
+    private val elegirDeGaleriaLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        if (uri != null) {
+            fotoUri = copiarAGaleriaPropia(uri) ?: uri
+            mostrarFoto(uri)
+        } else {
+            Toast.makeText(this, "No se seleccionó ninguna imagen", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registrar_residuos)
 
-        spCategoria  = findViewById(R.id.spCategoria)
-        spUnidad     = findViewById(R.id.spUnidad)
-        etCantidad   = findViewById(R.id.etCantidad)
-        etOrigen     = findViewById(R.id.etOrigen)
-        cbConfirmar  = findViewById(R.id.cbConfirmar)
-        btAgregar    = findViewById(R.id.btAgregar)
-        btHistorial  = findViewById(R.id.btHistorial)
-        btnVovler    = findViewById(R.id.btVolver)
+        spCategoria     = findViewById(R.id.spCategoria)
+        spUnidad        = findViewById(R.id.spUnidad)
+        etCantidad      = findViewById(R.id.etCantidad)
+        etOrigen        = findViewById(R.id.etOrigen)
+        cbConfirmar     = findViewById(R.id.cbConfirmar)
+        btAgregar       = findViewById(R.id.btAgregar)
+        btHistorial     = findViewById(R.id.btHistorial)
         imagenCategoria = findViewById(R.id.ImagenCategoria)
-        etFecha      = findViewById(R.id.etFecha)
+        etFecha         = findViewById(R.id.etFecha)
 
-
-        spCategoria.adapter = ArrayAdapter(this,
-            R.layout.spinner_item, categorias).also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-
-        spUnidad.adapter = ArrayAdapter(this,
-            R.layout.spinner_item, unidades).also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        spCategoria.adapter = adapterConPlaceholder(categorias)
+        spUnidad.adapter    = adapterConPlaceholder(unidades)
 
         btAgregar.setOnClickListener { validarYGuardar() }
 
@@ -100,14 +103,10 @@ class RegistrarResiduosActivity: BaseActivity(){
             historialLauncher.launch(Intent(this, HistorialResiduosActivity::class.java))
         }
 
-        btnVovler.setOnClickListener {
-            finish()
-        }
-
-        // NUEVO: click en el ImageView abre la cámara
         imagenCategoria.setOnClickListener {
             mostrarOpcionesImagen()
         }
+
         etFecha.setText(formatoVisible.format(fechaSeleccionada.time))  // default: hoy
         etFecha.setOnClickListener {
             DatePickerDialog(
@@ -123,28 +122,39 @@ class RegistrarResiduosActivity: BaseActivity(){
                 datePicker.maxDate = System.currentTimeMillis()  // bloquea fechas futuras
             }.show()
         }
+
         observarViewModel()
     }
 
-    // NUEVO: crea el archivo ANTES de lanzar el launcher
+    private fun adapterConPlaceholder(items: List<String>) =
+        object : ArrayAdapter<String>(this, R.layout.spinner_item, items) {
+            override fun isEnabled(position: Int) = position != 0
+
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val v = super.getView(position, convertView, parent) as TextView
+                v.setTextColor(if (position == 0) Color.parseColor("#9AA79C")
+                else Color.parseColor("#1B1F1C"))
+                return v
+            }
+
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val v = super.getDropDownView(position, convertView, parent) as TextView
+                v.setTextColor(if (position == 0) Color.parseColor("#C5CEC7")
+                else Color.parseColor("#1B1F1C"))
+                return v
+            }
+        }.also { it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+
     private fun abrirCamara() {
-        val uri = crearArchivoFoto() // esto ya devuelve Uri no-nulo
+        val uri = crearArchivoFoto()
         fotoUri = uri
-        tomarFotoLauncher.launch(uri) // pasamos el Uri no-nulo directamente
+        tomarFotoLauncher.launch(uri)
     }
 
     private fun crearArchivoFoto(): Uri {
         val dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val archivo = File(
-            dir,
-            "foto_${System.currentTimeMillis()}.jpg"
-        )
-        // FileProvider convierte file:// → content://
-        return FileProvider.getUriForFile(
-            this,
-            "${packageName}.fileprovider",
-            archivo
-        )
+        val archivo = File(dir, "foto_${System.currentTimeMillis()}.jpg")
+        return FileProvider.getUriForFile(this, "${packageName}.fileprovider", archivo)
     }
 
     private fun mostrarFoto(uri: Uri?) {
@@ -167,21 +177,16 @@ class RegistrarResiduosActivity: BaseActivity(){
             .show()
     }
 
-    private val elegirDeGaleriaLauncher = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri ->
-        if (uri != null) {
-            fotoUri = uri
-            mostrarFoto(uri)
-        } else {
-            Toast.makeText(this, "No se seleccionó ninguna imagen", Toast.LENGTH_SHORT).show()
-        }
-    }
-
     private fun validarYGuardar() {
         val cantidadStr = etCantidad.text.toString().trim()
         val origen      = etOrigen.text.toString().trim()
 
+        if (spCategoria.selectedItemPosition == 0) {
+            Toast.makeText(this, "Seleccione una categoría", Toast.LENGTH_SHORT).show(); return
+        }
+        if (spUnidad.selectedItemPosition == 0) {
+            Toast.makeText(this, "Seleccione una unidad", Toast.LENGTH_SHORT).show(); return
+        }
         if (cantidadStr.isEmpty()) { etCantidad.error = "Ingrese una cantidad"; return }
         if (origen.isEmpty())      { etOrigen.error   = "Ingrese el origen";    return }
         if (!cbConfirmar.isChecked) {
@@ -194,9 +199,11 @@ class RegistrarResiduosActivity: BaseActivity(){
             cantidad  = cantidadStr.toDouble(),
             unidad    = spUnidad.selectedItem.toString(),
             origen    = origen,
-            fecha     = fechaSeleccionada.time   // ← nuevo
+            fecha     = fechaSeleccionada.time,
+            fotoUri   = fotoUri?.toString()
         )
     }
+
     private fun limpiarFormulario() {
         etCantidad.text.clear()
         etOrigen.text.clear()
@@ -207,6 +214,7 @@ class RegistrarResiduosActivity: BaseActivity(){
         fechaSeleccionada = Calendar.getInstance()
         etFecha.setText(formatoVisible.format(fechaSeleccionada.time))
     }
+
     private fun observarViewModel() {
         lifecycleScope.launch {
             viewModel.guardado.collect { guardado ->
@@ -214,9 +222,20 @@ class RegistrarResiduosActivity: BaseActivity(){
                     Toast.makeText(this@RegistrarResiduosActivity,
                         "Residuo registrado", Toast.LENGTH_SHORT).show()
                     viewModel.resetGuardado()
-                    limpiarFormulario()
+                    startActivity(Intent(this@RegistrarResiduosActivity,
+                        HistorialResiduosActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    finish()
                 }
             }
         }
     }
+    private fun copiarAGaleriaPropia(uri: Uri): Uri? = runCatching {
+        val destino = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            "foto_${System.currentTimeMillis()}.jpg")
+        contentResolver.openInputStream(uri)?.use { entrada ->
+            destino.outputStream().use { salida -> entrada.copyTo(salida) }
+        }
+        FileProvider.getUriForFile(this, "${packageName}.fileprovider", destino)
+    }.getOrNull()
 }

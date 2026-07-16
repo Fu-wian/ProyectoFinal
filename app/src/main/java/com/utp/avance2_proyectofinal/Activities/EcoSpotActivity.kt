@@ -66,11 +66,6 @@ class EcoSpotActivity : BaseActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.eco_spots)
 
-        val btnVolver = findViewById<Button>(R.id.btnVolverEcoSpots)
-
-        btnVolver.setOnClickListener {
-            finish()
-        }
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.mapEcoSpots) as SupportMapFragment

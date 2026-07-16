@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="12dp"
-        android:text="Mantén presionado un registro para editarlo o eliminarlo"
+        android:text="Toca un registro para ver su detalle, editarlo o eliminarlo"
         android:textColor="#66796B"
         android:textSize="13sp" />
 
@@ -61,16 +61,6 @@
             android:padding="8dp" />
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Botón volver -->
-    <Button
-        android:id="@+id/btnVolver"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="#2E7D32"
-        android:text="Volver"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"
-        app:cornerRadius="16dp" />
+
 
 </LinearLayout>

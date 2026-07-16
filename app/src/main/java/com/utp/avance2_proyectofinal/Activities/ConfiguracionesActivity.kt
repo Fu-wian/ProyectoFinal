@@ -20,5 +20,12 @@ class ConfiguracionesActivity : BaseActivity() {
         findViewById<LinearLayout>(R.id.opcionAprender).setOnClickListener {
             startActivity(Intent(this, AprendeReciclarActivity::class.java))
         }
+        findViewById<LinearLayout>(R.id.opcionRecompensas).setOnClickListener {
+            startActivity(Intent(this, RecompensasActivity::class.java))
+        }
+        findViewById<LinearLayout>(R.id.opcionCampanias).setOnClickListener {
+            startActivity(Intent(this, CampaniasActivity::class.java))
+        }
+
     }
 }

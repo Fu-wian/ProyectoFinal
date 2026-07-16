@@ -24,7 +24,8 @@ class RegistrarResiduosVM (application: Application): AndroidViewModel(applicati
         cantidad: Double,
         unidad: String,
         origen: String,
-        fecha: Date = Date()
+        fecha: Date = Date(),
+        fotoUri: String? = null
     ) {
         val fechaStr = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(fecha)
         viewModelScope.launch {
@@ -34,7 +35,8 @@ class RegistrarResiduosVM (application: Application): AndroidViewModel(applicati
                     cantidad  = cantidad,
                     unidad    = unidad,
                     origen    = origen,
-                    fecha = fechaStr
+                    fecha     = fechaStr,
+                    fotoUri   = fotoUri
                 )
             )
             _guardado.value = true

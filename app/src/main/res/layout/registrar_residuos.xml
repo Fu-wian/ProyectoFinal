@@ -236,14 +236,5 @@
             app:strokeWidth="1dp"
             style="@style/Widget.Material3.Button.OutlinedButton" />
 
-        <Button
-            android:id="@+id/btVolver"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp"
-            android:text="Volver"
-            android:textColor="#66796B"
-            style="@style/Widget.Material3.Button.TextButton" />
-
     </LinearLayout>
 </ScrollView>

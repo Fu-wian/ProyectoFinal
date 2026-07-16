@@ -94,6 +94,10 @@ class ImpactoAmbientalActivity :  BaseActivity(){
             viewModel.impacto.collect { imp ->
                 tvSemana.text = "Semana del ${imp.rangoSemana}"
 
+                val btnSiguiente = findViewById<ImageButton>(R.id.btnSemanaSiguiente)
+                btnSiguiente.isEnabled = !imp.esSemanaActual
+                btnSiguiente.alpha = if (imp.esSemanaActual) 0.3f else 1f
+
                 val hayDatos = imp.totalKg > 0
                 tvVacio.visibility   = if (hayDatos) View.GONE else View.VISIBLE
                 contenido.visibility = if (hayDatos) View.VISIBLE else View.GONE
@@ -109,9 +113,7 @@ class ImpactoAmbientalActivity :  BaseActivity(){
                 val arboles = (imp.co2EvitadoKg / 21.0)   // un árbol absorbe ~21 kg de CO2 al año
                 tvCantidadReciclada.text = String.format(Locale.getDefault(), "%.1f", arboles)
                 tvDetalleReciclado.text = "árboles plantados (equiv. anual)"
-                val btnSiguiente = findViewById<ImageButton>(R.id.btnSemanaSiguiente)
-                btnSiguiente.isEnabled = !imp.esSemanaActual
-                btnSiguiente.alpha = if (imp.esSemanaActual) 0.3f else 1f
+
                 actualizarGrafica(imp.porDia)
                 mostrarCategorias(imp.porCategoria, imp.totalKg)
             }
