@@ -10,7 +10,7 @@ class HistorialResiduos(context: Context) :
 
     companion object {
         private const val DATABASE_NAME = "ecospot.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         const val TABLE_RESIDUOS   = "residuos"
         const val COL_ID           = "id"
@@ -19,6 +19,7 @@ class HistorialResiduos(context: Context) :
         const val COL_UNIDAD       = "unidad"
         const val COL_ORIGEN       = "origen"
         const val COL_FECHA        = "fecha"
+        const val COL_FOTO = "foto_uri"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -29,14 +30,16 @@ class HistorialResiduos(context: Context) :
                 $COL_CANTIDAD  REAL NOT NULL,
                 $COL_UNIDAD    TEXT NOT NULL,
                 $COL_ORIGEN    TEXT NOT NULL,
-                $COL_FECHA     TEXT NOT NULL
+                $COL_FECHA     TEXT NOT NULL,
+                $COL_FOTO      TEXT
             )
         """.trimIndent())
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_RESIDUOS")
-        onCreate(db)
+        if (oldVersion < 2) {
+            db.execSQL("ALTER TABLE $TABLE_RESIDUOS ADD COLUMN $COL_FOTO TEXT")
+        }
     }
 
     fun insertarResiduo(r: RegistrarResiduos): Long {
@@ -46,6 +49,7 @@ class HistorialResiduos(context: Context) :
             put(COL_UNIDAD,    r.unidad)
             put(COL_ORIGEN,    r.origen)
             put(COL_FECHA,     r.fecha)
+            put(COL_FOTO,      r.fotoUri)
         }
         return writableDatabase.insert(TABLE_RESIDUOS, null, values)
     }
@@ -53,6 +57,7 @@ class HistorialResiduos(context: Context) :
     fun obtenerTodos(filtroCategoria: String? = null): List<RegistrarResiduos> {
         val selection     = if (filtroCategoria != null) "$COL_CATEGORIA = ?" else null
         val selectionArgs = if (filtroCategoria != null) arrayOf(filtroCategoria) else null
+
 
         val cursor = readableDatabase.query(
             TABLE_RESIDUOS, null,
@@ -68,6 +73,7 @@ class HistorialResiduos(context: Context) :
             val uniIdx = c.getColumnIndexOrThrow(COL_UNIDAD)
             val oriIdx = c.getColumnIndexOrThrow(COL_ORIGEN)
             val feIdx  = c.getColumnIndexOrThrow(COL_FECHA)
+            val fotoIdx = c.getColumnIndexOrThrow(COL_FOTO)
             while (c.moveToNext()) {
                 lista += RegistrarResiduos(
                     id        = c.getLong(idIdx),
@@ -75,7 +81,8 @@ class HistorialResiduos(context: Context) :
                     cantidad  = c.getDouble(canIdx),
                     unidad    = c.getString(uniIdx),
                     origen    = c.getString(oriIdx),
-                    fecha     = c.getString(feIdx)
+                    fecha     = c.getString(feIdx),
+                    fotoUri = if (c.isNull(fotoIdx)) null else c.getString(fotoIdx)
                 )
             }
         }
@@ -89,6 +96,7 @@ class HistorialResiduos(context: Context) :
             put(COL_UNIDAD,    r.unidad)
             put(COL_ORIGEN,    r.origen)
             put(COL_FECHA,     r.fecha)
+            put(COL_FOTO, r.fotoUri)
         }
         return writableDatabase.update(
             TABLE_RESIDUOS, values, "$COL_ID = ?", arrayOf(r.id.toString())

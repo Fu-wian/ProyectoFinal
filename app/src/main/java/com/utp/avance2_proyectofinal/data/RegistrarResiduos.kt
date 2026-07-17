@@ -6,5 +6,6 @@ data class RegistrarResiduos(
     val cantidad: Double,
     val unidad: String,
     val origen: String,
-    val fecha: String
+    val fecha: String,
+    val fotoUri: String? = null
 )

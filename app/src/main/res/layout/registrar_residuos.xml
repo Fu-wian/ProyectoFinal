@@ -1,120 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- Formulario -->
+    android:layout_height="match_parent"
+    android:background="#F4F9F4"
+    android:fillViewport="true">
 
     <LinearLayout
-        android:layout_width="375dp"
-        android:layout_height="698dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="20dp">
 
+        <!-- Encabezado -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:text="Nuevo Residuo"
-            android:textSize="18sp"
+            android:text="♻️ Nuevo Residuo"
+            android:textColor="#1B5E20"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Categoría:" />
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="Registra lo que reciclaste hoy"
+            android:textColor="#66796B"
+            android:textSize="14sp" />
 
-        <Spinner
-            android:id="@+id/spCategoria"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="8dp" />
-
-        <ImageView
-            android:id="@+id/ImagenCategoria"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/cosas_que_se_pueden_reciclar_2884_orig"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cantidad:" />
-
-        <LinearLayout
+        <!-- Tarjeta: foto del residuo -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:orientation="horizontal">
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
-            <EditText
-                android:id="@+id/etCantidad"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:hint="Ingrese Número"
-                android:inputType="numberDecimal"
-                android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <Spinner
-                android:id="@+id/spUnidad"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1" />
+                <ImageView
+                    android:id="@+id/ImagenCategoria"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:background="#E8F5E9"
+                    android:contentDescription="Foto del residuo"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/cosas_que_se_pueden_reciclar_2884_orig" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="📷 Toca la imagen para tomar una foto o elegir de la galería"
+                    android:textAlignment="center"
+                    android:textColor="#66796B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Origen del Residuo:" />
-
-        <EditText
-            android:id="@+id/etOrigen"
+        <!-- Tarjeta: datos del residuo -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginBottom="8dp"
-            android:hint="Inserte el origen"
-            android:inputType="text" />
-
-        <CheckBox
-            android:id="@+id/cbConfirmar"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Confirmo que todos los datos son correctos" />
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Categoría"
+                    android:textColor="#1B5E20"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_spinner"
+                    android:paddingStart="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Cantidad"
+                    android:textColor="#1B5E20"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:hint="Ej: 2.5"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCantidad"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:textColor="#1B1F1C"
+                            android:textColorHint="#9AA79C"
+                            android:textSize="15sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Spinner
+                        android:id="@+id/spUnidad"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_spinner"
+                        android:paddingStart="12dp"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Origen del residuo"
+                    android:textColor="#1B5E20"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ej: Casa, oficina, universidad"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOrigen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:textColor="#1B1F1C"
+                        android:textColorHint="#9AA79C"
+                        android:textSize="15sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Fecha"
+                    android:textColor="#1B5E20"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_spinner"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+                    android:focusable="false"
+                    android:padding="14dp"
+                    android:textColor="#1B1F1C"
+                    android:textColorHint="#9AA79C"
+                    android:textSize="15sp" />
+                <CheckBox
+                    android:id="@+id/cbConfirmar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Confirmo que todos los datos son correctos"
+                    android:textColor="#37474F"
+                    android:textSize="13sp"
+                    app:buttonTint="#2E7D32" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Botones -->
         <Button
             android:id="@+id/btAgregar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Agregar Residuo" />
+            android:layout_height="56dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#2E7D32"
+            android:text="Agregar residuo"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            app:cornerRadius="16dp" />
 
         <Button
             android:id="@+id/btHistorial"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Ver Historial" />
-
-        <Button
-            android:id="@+id/btVolver"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Volver"
-            app:layout_constraintTop_toBottomOf="@+id/btHistorial" />
+            android:layout_height="52dp"
+            android:layout_marginBottom="10dp"
+            android:text="Ver historial"
+            android:textColor="#2E7D32"
+            android:textSize="14sp"
+            app:cornerRadius="16dp"
+            app:strokeColor="#2E7D32"
+            app:strokeWidth="1dp"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
 
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

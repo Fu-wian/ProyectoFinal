@@ -3,45 +3,67 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="#F4F9F4"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
-
+        android:padding="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TinaEco ♻️"
+            android:textColor="#2E7D32"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05" />
         <!-- Encabezado -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🌱 Tu Impacto Ambiental"
+            android:textColor="#1B5E20"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnVolver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Volver" />
+            <ImageButton
+                android:id="@+id/btnSemanaAnterior"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Semana anterior"
+                android:src="@drawable/baseline_chevron_left_24"
+                app:tint="#2E7D32" />
 
             <TextView
+                android:id="@+id/tvSemana"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Tu impacto Ambiental"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:text="Semana del ..."
+                android:textColor="#66796B"
+                android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/tvSemana"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Semana del ..."
-            android:textColor="#757575"
-            android:textSize="12sp" />
+            <ImageButton
+                android:id="@+id/btnSemanaSiguiente"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Semana siguiente"
+                android:src="@drawable/baseline_chevron_right_24"
+                app:tint="#2E7D32" />
+        </LinearLayout>
 
         <!-- Estado vacío -->
         <TextView
@@ -50,8 +72,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:gravity="center"
-            android:text="Aún no registras residuos esta semana.\nToca +Agregar Residuos para empezar."
-            android:textSize="16sp"
+            android:text="Aún no registras residuos esta semana.\nToca + Agregar Residuos para empezar."
+            android:textColor="#66796B"
+            android:textSize="15sp"
             android:visibility="gone" />
 
         <!-- Contenido con datos -->
@@ -61,59 +84,62 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Total generado + comparación -->
-            <androidx.cardview.widget.CardView
+            <!-- HERO: total de la semana -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
+                app:cardBackgroundColor="#2E7D32"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Residuos generados"
-                        android:textColor="#757575"
-                        android:textSize="12sp" />
+                        android:text="Residuos registrados esta semana"
+                        android:textColor="#C8E6C9"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/tvCantidadResiduos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:text="0.0 kg"
-                        android:textSize="26sp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="40sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvComparacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="4dp"
                         android:text=""
-                        android:textColor="#757575"
-                        android:textSize="12sp" />
+                        android:textColor="#C8E6C9"
+                        android:textSize="13sp" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <!-- CO2 y Reciclado -->
+            <!-- Mini-cards: CO2 y árboles -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="16dp"
                     app:cardElevation="2dp">
 
                     <LinearLayout
@@ -125,15 +151,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="CO₂ estimado"
-                            android:textColor="#757575"
+                            android:text="💨 CO₂ evitado"
+                            android:textColor="#66796B"
                             android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvcantidadCo2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
                             android:text="0.0 kg"
+                            android:textColor="#1B5E20"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -143,18 +171,18 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:text=""
-                            android:textColor="#757575"
+                            android:textColor="#66796B"
                             android:textSize="11sp" />
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="#E8F5E9"
-                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="16dp"
                     app:cardElevation="2dp">
 
                     <LinearLayout
@@ -166,16 +194,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Reciclaste"
-                            android:textColor="#2E7D32"
+                            android:text="🌳 Árboles"
+                            android:textColor="#66796B"
                             android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/tvcantidadReciclada"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0%"
-                            android:textColor="#2E7D32"
+                            android:layout_marginTop="2dp"
+                            android:text="0"
+                            android:textColor="#1B5E20"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -185,30 +214,32 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:text=""
-                            android:textColor="#2E7D32"
+                            android:textColor="#66796B"
                             android:textSize="11sp" />
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
             <!-- Gráfica semanal -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardCornerRadius="12dp"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Residuos por día (kg)"
+                        android:textColor="#1B5E20"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -261,29 +292,30 @@
                             <View android:id="@+id/barDom" style="@style/BarraDia" />
                             <TextView style="@style/DiaGrafica" android:text="D" />
                         </LinearLayout>
-
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Desglose por categoría -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:cardCornerRadius="12dp"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp">
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Por categoría"
+                        android:textColor="#1B5E20"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -294,16 +326,19 @@
                         android:layout_marginTop="8dp"
                         android:orientation="vertical" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
         <Button
             android:id="@+id/btnAgregarResiduos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
             android:layout_marginTop="16dp"
-            android:text="+Agregar Residuos" />
+            android:backgroundTint="#2E7D32"
+            android:text="+ Agregar Residuos"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            app:cornerRadius="16dp" />
 
     </LinearLayout>
 </ScrollView>

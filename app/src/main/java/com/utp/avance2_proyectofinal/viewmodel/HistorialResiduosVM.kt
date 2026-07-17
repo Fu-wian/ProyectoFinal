@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
 class HistorialResiduosVM(application: Application) : AndroidViewModel(application){
     private val repository = HistorialResiduosRepository(application)
 
+    private var filtroActual: String? = null   // ← NUEVO: memoria del filtro
+
     private val _residuos = MutableStateFlow<List<RegistrarResiduos>>(emptyList())
     val residuos: StateFlow<List<RegistrarResiduos>> = _residuos.asStateFlow()
 
@@ -21,23 +23,26 @@ class HistorialResiduosVM(application: Application) : AndroidViewModel(applicati
 
     init { cargarResiduos() }
 
-    fun cargarResiduos(filtro: String? = null) {
+    fun cargarResiduos(filtro: String? = filtroActual) {   // ← CAMBIO: default = filtro recordado
+        filtroActual = filtro                               // ← NUEVO: recordar
         viewModelScope.launch {
-            _residuos.value    = repository.obtenerTodos(filtro)
-            _totalCount.value  = repository.contar()
+            _totalCount.value = repository.contar()
+            _residuos.value   = repository.obtenerTodos(filtro)
+
         }
     }
 
     fun eliminarResiduo(id: Long) {
         viewModelScope.launch {
             repository.eliminar(id)
-            cargarResiduos()
+            cargarResiduos()   // sin argumento → usa filtroActual automáticamente
         }
     }
+
     fun editarResiduo(residuo: RegistrarResiduos) {
         viewModelScope.launch {
             repository.actualizar(residuo)
-            cargarResiduos()
+            cargarResiduos()   // ídem
         }
     }
 }

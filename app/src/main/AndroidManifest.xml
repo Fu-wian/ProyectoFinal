@@ -28,19 +28,34 @@
             android:value="AIzaSyBGsTWkxdunImBksL_o-0SmoBGjjm81koo"/>
 
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.ImpactoAmbientalActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.ImpactoAmbientalActivity"/>
+        <activity android:name=".Activities.AprendeReciclarActivity"/>
         <activity android:name=".Activities.PerfilActivity"/>
         <activity android:name=".Activities.RegistrarResiduosActivity"/>
         <activity android:name=".Activities.HistorialResiduosActivity"/>
         <activity android:name=".Activities.EcoSpotActivity"/>
+        <activity android:name=".Activities.ConfiguracionesActivity"/>
+        <activity android:name=".Activities.RecompensasActivity" />
+        <activity android:name=".Activities.DetalleResiduoActivity" />
+        <activity android:name=".Activities.CanjeActivity" />
+        <activity android:name=".Activities.CampaniasActivity" />
 
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

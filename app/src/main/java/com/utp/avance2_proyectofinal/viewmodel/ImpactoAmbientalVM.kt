@@ -19,7 +19,8 @@ data class ImpactoSemanal(
     val diasActivos: Int = 0,
     val porDia: List<Double> = List(7) { 0.0 },      // 0 = Lunes ... 6 = Domingo
     val porCategoria: Map<String, Double> = emptyMap(),
-    val rangoSemana: String = ""
+    val rangoSemana: String = "",
+    val esSemanaActual: Boolean = true
 )
 
 class ImpactoAmbientalVM(application: Application) : AndroidViewModel(application) {
@@ -51,10 +52,9 @@ class ImpactoAmbientalVM(application: Application) : AndroidViewModel(applicatio
             val inicioSemana = Calendar.getInstance().apply {
                 firstDayOfWeek = Calendar.MONDAY
                 set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-                set(Calendar.HOUR_OF_DAY, 0)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
+                set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
+                add(Calendar.WEEK_OF_YEAR, offsetSemanas)
             }
             val inicioSemanaPasada = (inicioSemana.clone() as Calendar).apply {
                 add(Calendar.DAY_OF_YEAR, -7)
@@ -68,6 +68,9 @@ class ImpactoAmbientalVM(application: Application) : AndroidViewModel(applicatio
             var totalPasada = 0.0
             val porDia = MutableList(7) { 0.0 }
             val porCategoria = mutableMapOf<String, Double>()
+            val finSemanaExclusivo = (inicioSemana.clone() as Calendar).apply {
+                add(Calendar.DAY_OF_YEAR, 7)
+            }
 
             repository.obtenerTodos().forEach { r ->
                 val fecha = runCatching { formato.parse(r.fecha) }.getOrNull() ?: return@forEach
@@ -75,7 +78,7 @@ class ImpactoAmbientalVM(application: Application) : AndroidViewModel(applicatio
                 val kg = aKilogramos(r.cantidad, r.unidad)
 
                 when {
-                    !cal.before(inicioSemana) -> {
+                    !cal.before(inicioSemana) && cal.before(finSemanaExclusivo)-> {
                         total += kg
                         co2Evitado += kg * (CO2_EVITADO[r.categoria] ?: 0.5)
 
@@ -83,7 +86,7 @@ class ImpactoAmbientalVM(application: Application) : AndroidViewModel(applicatio
                         porDia[indiceDia] += kg
                         porCategoria[r.categoria] = (porCategoria[r.categoria] ?: 0.0) + kg
                     }
-                    !cal.before(inicioSemanaPasada) -> totalPasada += kg
+                    !cal.before(inicioSemanaPasada) && cal.before(inicioSemana)-> totalPasada += kg
                 }
             }
 
@@ -97,7 +100,8 @@ class ImpactoAmbientalVM(application: Application) : AndroidViewModel(applicatio
                 diasActivos         = porDia.count { it > 0 },
                 porDia              = porDia,
                 porCategoria        = porCategoria,
-                rangoSemana         = rango
+                rangoSemana         = rango,
+                esSemanaActual      = offsetSemanas == 0
             )
         }
     }
@@ -108,5 +112,18 @@ class ImpactoAmbientalVM(application: Application) : AndroidViewModel(applicatio
         "lb"       -> cantidad * 0.4536
         "unidades" -> cantidad * 0.25   // estimación: 0.25 kg por unidad
         else       -> cantidad
+    }
+    private var offsetSemanas = 0   // 0 = actual, -1 = pasada, etc.
+
+    fun semanaAnterior() {
+        offsetSemanas--
+        cargarImpacto()
+    }
+
+    fun semanaSiguiente() {
+        if (offsetSemanas < 0) {    // nunca hacia el futuro
+            offsetSemanas++
+            cargarImpacto()
+        }
     }
 }

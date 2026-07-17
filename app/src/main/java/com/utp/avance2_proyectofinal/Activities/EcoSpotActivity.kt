@@ -28,7 +28,10 @@ import android.widget.Spinner
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 
-class EcoSpotActivity : AppCompatActivity(), OnMapReadyCallback {
+class EcoSpotActivity : BaseActivity(), OnMapReadyCallback {
+
+
+    override fun obtenerItemMenu() = R.id.nav_ecospots
 
     private lateinit var googleMap: GoogleMap
 
@@ -52,14 +55,6 @@ class EcoSpotActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.eco_spots)
 
-        ecoSpotVM = ViewModelProvider(this)[EcoSpotVM::class.java]
-        observarEcoSpots()
-
-        val btnVolver = findViewById<Button>(R.id.btnVolverEcoSpots)
-
-        btnVolver.setOnClickListener {
-            finish()
-        }
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.mapEcoSpots) as SupportMapFragment

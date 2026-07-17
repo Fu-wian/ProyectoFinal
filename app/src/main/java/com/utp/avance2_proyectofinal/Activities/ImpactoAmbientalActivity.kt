@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -18,7 +19,9 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
 
-class ImpactoAmbientalActivity : AppCompatActivity() {
+class ImpactoAmbientalActivity :  BaseActivity(){
+
+    override fun obtenerItemMenu() = R.id.nav_inicio
 
     companion object {
         const val EXTRA_NOMBRE_USUARIO = "extra_Impacto"
@@ -69,11 +72,15 @@ class ImpactoAmbientalActivity : AppCompatActivity() {
             findViewById(R.id.tvValDom)
         )
 
-        findViewById<Button>(R.id.btnVolver).setOnClickListener { finish() }
         findViewById<Button>(R.id.btnAgregarResiduos).setOnClickListener {
             startActivity(Intent(this, RegistrarResiduosActivity::class.java))
         }
-
+        findViewById<ImageButton>(R.id.btnSemanaAnterior).setOnClickListener {
+            viewModel.semanaAnterior()
+        }
+        findViewById<ImageButton>(R.id.btnSemanaSiguiente).setOnClickListener {
+            viewModel.semanaSiguiente()
+        }
         observarViewModel()
     }
 
@@ -86,6 +93,10 @@ class ImpactoAmbientalActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.impacto.collect { imp ->
                 tvSemana.text = "Semana del ${imp.rangoSemana}"
+
+                val btnSiguiente = findViewById<ImageButton>(R.id.btnSemanaSiguiente)
+                btnSiguiente.isEnabled = !imp.esSemanaActual
+                btnSiguiente.alpha = if (imp.esSemanaActual) 0.3f else 1f
 
                 val hayDatos = imp.totalKg > 0
                 tvVacio.visibility   = if (hayDatos) View.GONE else View.VISIBLE
@@ -152,6 +163,7 @@ class ImpactoAmbientalActivity : AppCompatActivity() {
             fila.addView(TextView(this).apply {
                 text = categoria
                 textSize = 12f
+                setTextColor(Color.parseColor("#37474F"))
                 layoutParams = LinearLayout.LayoutParams(
                     (90 * densidad).toInt(), LinearLayout.LayoutParams.WRAP_CONTENT
                 )

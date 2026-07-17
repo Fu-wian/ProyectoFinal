@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F9F4"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎁 Recompensas"
+            android:textColor="#1B5E20"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="Recicla cada mes y desbloquea promos de nuestros socios"
+            android:textColor="#66796B"
+            android:textSize="13sp" />
+
+        <!-- Hero: kg del mes -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="#2E7D32"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reciclado este mes"
+                    android:textColor="#C8E6C9"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvKgMes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="0.0 kg"
+                    android:textColor="#FFFFFF"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Aquí se agregan las cards de promos desde Kotlin -->
+        <LinearLayout
+            android:id="@+id/layoutPromos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/btVolver"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:text="Volver"
+            android:textColor="#66796B"
+            style="@style/Widget.Material3.Button.TextButton" />
+
+    </LinearLayout>
+</ScrollView>
