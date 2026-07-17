@@ -1,31 +1,33 @@
 package com.utp.avance2_proyectofinal.Activities
 
-import android.os.Bundle
 import android.content.Intent
-import android.graphics.Color
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.utp.avance2_proyectofinal.R
+import com.utp.avance2_proyectofinal.data.Promo
 import com.utp.avance2_proyectofinal.viewmodel.RecompensasVM
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class RecompensasActivity : AppCompatActivity() {   // hija: NO BaseActivity
+class RecompensasActivity : AppCompatActivity() {
 
     private val viewModel: RecompensasVM by viewModels()
-    private lateinit var layoutPromos: LinearLayout
+    private lateinit var listPromos: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.recompensas)
 
-        layoutPromos = findViewById(R.id.layoutPromos)
-
-        findViewById<Button>(R.id.btVolver).setOnClickListener { finish() }  // aquí SÍ es válido
+        listPromos = findViewById(R.id.listPromos)
+        findViewById<Button>(R.id.btVolver).setOnClickListener { finish() }
 
         lifecycleScope.launch {
             viewModel.kgDelMes.collect { kg ->
@@ -37,70 +39,42 @@ class RecompensasActivity : AppCompatActivity() {   // hija: NO BaseActivity
     }
 
     private fun mostrarPromos(kgDelMes: Double) {
-        layoutPromos.removeAllViews()
+        listPromos.adapter = object : ArrayAdapter<Promo>(
+            this@RecompensasActivity, R.layout.item_promo, viewModel.promos
+        ) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = convertView ?: layoutInflater.inflate(R.layout.item_promo, parent, false)
+                val promo = viewModel.promos[position]
+                val desbloqueada = kgDelMes >= promo.kgRequeridos
 
-        viewModel.promos.forEach { promo ->
-            val desbloqueada = kgDelMes >= promo.kgRequeridos
+                view.findViewById<TextView>(R.id.tvTituloPromo).text =
+                    "${promo.titulo} — ${promo.socio}"
 
-            val card = com.google.android.material.card.MaterialCardView(this).apply {
-                radius = 16 * resources.displayMetrics.density
-                cardElevation = 2 * resources.displayMetrics.density
-                setCardBackgroundColor(android.graphics.Color.WHITE)
-                alpha = if (desbloqueada) 1f else 0.5f
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply { bottomMargin = (10 * resources.displayMetrics.density).toInt() }
-            }
+                view.findViewById<TextView>(R.id.tvEstadoPromo).text =
+                    if (desbloqueada) "✅ Disponible"
+                    else "🔒 Te faltan ${String.format(Locale.getDefault(), "%.1f", promo.kgRequeridos - kgDelMes)} kg"
 
-            val contenido = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                val pad = (16 * resources.displayMetrics.density).toInt()
-                setPadding(pad, pad, pad, pad)
-            }
-            contenido.addView(TextView(this).apply {
-                text = "${promo.titulo} — ${promo.socio}"
-                textSize = 15f
-                setTextColor(android.graphics.Color.parseColor("#1B5E20"))
-                setTypeface(typeface, android.graphics.Typeface.BOLD)
-            })
-
-            contenido.addView(TextView(this).apply {
-                text = if (desbloqueada) "✅ Disponible"
-                else "🔒 Te faltan ${String.format(Locale.getDefault(), "%.1f", promo.kgRequeridos - kgDelMes)} kg"
-                textSize = 13f
-                setTextColor(android.graphics.Color.parseColor("#66796B"))
-            })
-            val btnCanje = Button(this).apply {
-                text = "Canjear →"
-                setTextColor(Color.WHITE)
-                backgroundTintList = android.content.res.ColorStateList.valueOf(
-                    Color.parseColor("#2E7D32"))
-                val pad = (4 * resources.displayMetrics.density).toInt()
-                setPadding(pad, pad, pad, pad)
-            }
-            if (desbloqueada) {
-                val btnCanje = Button(this).apply {
-                    text = "Canjear →"
-                    setTextColor(Color.WHITE)
-                    backgroundTintList = android.content.res.ColorStateList.valueOf(
-                        Color.parseColor("#2E7D32"))
+                val btnCanjear = view.findViewById<Button>(R.id.btnCanjearPromo)
+                if (desbloqueada) {
+                    btnCanjear.visibility = View.VISIBLE
+                    btnCanjear.setOnClickListener {
+                        startActivity(Intent(this@RecompensasActivity, CanjeActivity::class.java).apply {
+                            putExtra(CanjeActivity.EXTRA_TITULO,      promo.titulo)
+                            putExtra(CanjeActivity.EXTRA_SOCIO,       promo.socio)
+                            putExtra(CanjeActivity.EXTRA_DESCRIPCION, promo.descripcion)
+                            putExtra(CanjeActivity.EXTRA_CODIGO,      promo.codigoCanje)
+                            putExtra(CanjeActivity.EXTRA_INSTAGRAM,   promo.instagram)
+                            putExtra(CanjeActivity.EXTRA_WEB,         promo.web)
+                        })
+                    }
+                    view.alpha = 1f
+                } else {
+                    btnCanjear.visibility = View.GONE
+                    view.alpha = 0.5f
                 }
-                btnCanje.setOnClickListener {
-                    startActivity(Intent(this, CanjeActivity::class.java).apply {
-                        putExtra(CanjeActivity.EXTRA_TITULO,      promo.titulo)
-                        putExtra(CanjeActivity.EXTRA_SOCIO,       promo.socio)
-                        putExtra(CanjeActivity.EXTRA_DESCRIPCION, promo.descripcion)
-                        putExtra(CanjeActivity.EXTRA_CODIGO,      promo.codigoCanje)
-                        putExtra(CanjeActivity.EXTRA_INSTAGRAM,   promo.instagram)
-                        putExtra(CanjeActivity.EXTRA_WEB,         promo.web)
-                    })
-                }
-                contenido.addView(btnCanje)
-            }
 
-            card.addView(contenido)
-            layoutPromos.addView(card)
+                return view
+            }
         }
     }
 }

@@ -30,11 +30,21 @@
             android:textColor="#66796B"
             android:textSize="13sp" />
 
-        <LinearLayout
-            android:id="@+id/layoutCampanias"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
+
+            <ListView
+                android:id="@+id/listCampanias"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#E0EDE0"
+                android:dividerHeight="1dp"
+                android:padding="8dp" />
+        </com.google.android.material.card.MaterialCardView>
 
         <Button
             android:id="@+id/btnVolverCampanias"

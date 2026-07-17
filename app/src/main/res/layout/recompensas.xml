@@ -63,12 +63,13 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Aquí se agregan las cards de promos desde Kotlin -->
-        <LinearLayout
-            android:id="@+id/layoutPromos"
+        <!-- Aquí se agregan las cards de promos  -->
+        <ListView
+            android:id="@+id/listPromos"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:layout_height="404dp"
+            android:divider="@null"
+            android:dividerHeight="10dp" />
 
         <Button
             android:id="@+id/btVolver"
@@ -78,6 +79,5 @@
             android:text="Volver"
             android:textColor="#66796B"
             style="@style/Widget.Material3.Button.TextButton" />
-
     </LinearLayout>
 </ScrollView>
