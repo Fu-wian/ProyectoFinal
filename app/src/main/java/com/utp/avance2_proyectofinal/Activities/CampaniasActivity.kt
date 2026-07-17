@@ -126,6 +126,10 @@ class CampaniasActivity : AppCompatActivity() {
         }
     }
 
+
+    // Location.distanceBetween usa la fórmula de Haversine internamente para
+    // calcular la distancia geodésica (sobre la esfera terrestre) entre dos pares
+    // de coordenadas. El resultado viene en metros; lo convertimos a km.
     private fun distanciaKm(ubicacion: Location, camp: Campania): Double {
         val resultado = FloatArray(1)
         Location.distanceBetween(

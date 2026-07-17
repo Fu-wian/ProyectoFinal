@@ -37,6 +37,9 @@ class HistorialResiduos(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        // Migración incremental sin pérdida de datos. Cada bloque `if` maneja
+        // el salto desde una versión específica hacia adelante. Evitamos DROP TABLE
+        // porque destruiría los registros existentes en instalaciones activas.
         if (oldVersion < 2) {
             db.execSQL("ALTER TABLE $TABLE_RESIDUOS ADD COLUMN $COL_FOTO TEXT")
         }

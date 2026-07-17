@@ -60,7 +60,7 @@ class CanjeActivity : AppCompatActivity() {
 
     /**
      * Genera un QR básico usando el algoritmo de módulos QR versión 1.
-     * Sin librerías externas — dibuja la estructura fija del QR
+     * Sin librerías externas ya que dibuja la estructura fija del QR
      * (patrones de posición + datos en binario) en un Bitmap.
      */
     private fun generarQr(texto: String, tamañoPx: Int): Bitmap {

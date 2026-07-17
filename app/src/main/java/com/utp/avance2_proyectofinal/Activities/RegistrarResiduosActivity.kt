@@ -126,6 +126,10 @@ class RegistrarResiduosActivity : BaseActivity() {
         observarViewModel()
     }
 
+    // Adapter con item 0 como placeholder ("Seleccione..."). isEnabled(0)=false
+    // impide que el usuario seleccione el placeholder desde el dropdown, pero
+    // éste aparece atenuado indicando que no hay elección aún. La validación
+    // final del formulario descarta position == 0 antes de guardar.
     private fun adapterConPlaceholder(items: List<String>) =
         object : ArrayAdapter<String>(this, R.layout.spinner_item, items) {
             override fun isEnabled(position: Int) = position != 0
@@ -230,6 +234,12 @@ class RegistrarResiduosActivity : BaseActivity() {
             }
         }
     }
+
+    // Las URIs de PickVisualMedia otorgan permiso de lectura temporal, que expira
+    // al cerrar la app. Si guardáramos esa URI directamente en la BD, la foto no
+    // podría mostrarse en la siguiente sesión (SecurityException). La solución
+    // es copiar la imagen al almacenamiento privado de la app, cuyas URIs de
+    // FileProvider sí son persistentes.
     private fun copiarAGaleriaPropia(uri: Uri): Uri? = runCatching {
         val destino = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),
             "foto_${System.currentTimeMillis()}.jpg")

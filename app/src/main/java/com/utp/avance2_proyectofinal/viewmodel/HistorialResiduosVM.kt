@@ -23,8 +23,11 @@ class HistorialResiduosVM(application: Application) : AndroidViewModel(applicati
 
     init { cargarResiduos() }
 
-    fun cargarResiduos(filtro: String? = filtroActual) {   // ← CAMBIO: default = filtro recordado
-        filtroActual = filtro                               // ← NUEVO: recordar
+    // filtroActual guarda el último filtro aplicado desde la UI. Así, cuando
+    // editarResiduo/eliminarResiduo recargan la lista sin argumento explícito,
+    // respetan el filtro activo en vez de resetear la vista a "todos".
+    fun cargarResiduos(filtro: String? = filtroActual) {
+        filtroActual = filtro
         viewModelScope.launch {
             _totalCount.value = repository.contar()
             _residuos.value   = repository.obtenerTodos(filtro)

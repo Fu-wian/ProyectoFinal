@@ -31,8 +31,11 @@ class ImpactoAmbientalVM(application: Application) : AndroidViewModel(applicatio
     val impacto: StateFlow<ImpactoSemanal> = _impacto.asStateFlow()
 
     companion object {
-        // kg de CO2 que se EVITAN por cada kg reciclado, en vez de producir
-        // material nuevo (valores aproximados de referencia)
+        // Factores aproximados de kg de CO2 evitados por cada kg de material reciclado.
+        // Se usan como estimación para comunicar impacto al usuario; los valores están
+        // basados en referencias generales de estudios de ciclo de vida (LCA) y no
+        // pretenden ser mediciones exactas. El fallback (0.5) se aplica a categorías
+        // sin factor conocido para evitar mostrar 0.0 kg de impacto.
         private val CO2_EVITADO = mapOf(
             "Plástico"    to 1.5,
             "Vidrio"      to 0.3,
@@ -77,6 +80,10 @@ class ImpactoAmbientalVM(application: Application) : AndroidViewModel(applicatio
                 val cal = Calendar.getInstance().apply { time = fecha }
                 val kg = aKilogramos(r.cantidad, r.unidad)
 
+                // Se acota la semana por ambos lados (inicioSemana inclusivo, finSemanaExclusivo
+                // exclusivo). Al implementar la navegación entre semanas, sin la cota superior
+                // una semana pasada capturaría también los registros de las semanas siguientes,
+                // distorsionando el total.
                 when {
                     !cal.before(inicioSemana) && cal.before(finSemanaExclusivo)-> {
                         total += kg
