@@ -55,10 +55,11 @@ class EcoSpotActivity : BaseActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.eco_spots)
 
+        ecoSpotVM = ViewModelProvider(this)[EcoSpotVM::class.java]
+        observarEcoSpots()
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.mapEcoSpots) as SupportMapFragment
-
         mapFragment.getMapAsync(this)
     }
 
@@ -106,7 +107,7 @@ class EcoSpotActivity : BaseActivity(), OnMapReadyCallback {
             true
         }
 
-        googleMap.setOnMapClickListener { latLng ->
+        googleMap.setOnMapLongClickListener { latLng ->
             mostrarDialogoAgregarEcoSpot(latLng)
         }
 
